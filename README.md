@@ -2,7 +2,7 @@
 
 It contains fake implmentations for
 
-1. [docker-compose](#Compose)
+1. [docker-compose](#compose)
 2. Helpers provider
 3. Logger provider
 4. Setup `adonis-fold` resolver.
@@ -223,8 +223,6 @@ examples of using nginx. Use port volume. show build vs runtime.
 
 
 # Compose
-
-
 
 ```yaml
 version: '2'
