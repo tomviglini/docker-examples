@@ -153,9 +153,41 @@ c7519937adf2        38 minutes ago      /bin/sh -c #(nop) WORKDIR /code         
 <missing>           7 weeks ago         /bin/sh -c #(nop) ADD file:3df55c321c1c8d7...   4.81 MB
 ```
 
-We can see that the layer ids: 7fce0a61c1d6, 8bf482825b9f and c7519937adf2 are shared between app:v1 and app:v2. The command ADD is not shared because the file index.js changed and all the subsequent commands couldn't be shared as well.
+We can see that only the last 2 layers aren't shared between app:v1 and app:v2. The command ADD is not shared because the file index.js changed and all the subsequent commands couldn't be shared as well.
 
-Every other line represent a layer in other image. In this case app uses a base image from node:alpine that uses a base image from alpine:3.4.
+Every other line represent a layer in other images. In this case we have 3 images: app:v1 => node:alpine => alpine:3.4.
+
+app:v2
+
+```bash
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+ed75a74886a2        20 minutes ago      /bin/sh -c #(nop)  CMD ["node" "index.js"]      0 B
+3ae6ce5c8810        20 minutes ago      /bin/sh -c #(nop) ADD dir:4c7d1f1438ce1c97...   21.2 kB
+c7519937adf2        38 minutes ago      /bin/sh -c #(nop) WORKDIR /code                 0 B
+8bf482825b9f        38 minutes ago      /bin/sh -c mkdir -p /code                       0 B
+
+```
+
+node:alpine
+
+```bash
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+7fce0a61c1d6        3 days ago          /bin/sh -c #(nop)  CMD ["node"]                 0 B
+<missing>           3 days ago          /bin/sh -c apk add --no-cache --virtual .b...   3.71 MB
+<missing>           3 days ago          /bin/sh -c #(nop)  ENV YARN_VERSION=0.23.2      0 B
+<missing>           11 days ago         /bin/sh -c addgroup -g 1000 node     && ad...   50.5 MB
+<missing>           11 days ago         /bin/sh -c #(nop)  ENV NODE_VERSION=7.9.0       0 B
+<missing>           7 weeks ago         /bin/sh -c #(nop)  ENV NPM_CONFIG_LOGLEVEL...   0 B
+```
+
+alpine:3.4
+
+```bash
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+<missing>           7 weeks ago         /bin/sh -c #(nop) ADD file:3df55c321c1c8d7...   4.81 MB
+```
+
+
 
 The command CMD in the Dockerfile is for setting the default command to execute. We can override the command when running the image.
 
