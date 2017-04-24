@@ -1,3 +1,14 @@
+# Docker
+
+It contains fake implmentations for
+
+1. [docker-compose](#Compose)
+2. Helpers provider
+3. Logger provider
+4. Setup `adonis-fold` resolver.
+
+
+
 Dockerfile
 
 ```Dockerfile
@@ -199,3 +210,54 @@ $ docker run app:v3 node /code/override-cmd.js
 
 Hello World Override CMD
 ```
+
+
+
+
+examples of using nginx. Use port volume. show build vs runtime.
+
+
+
+
+
+
+
+# Compose
+
+
+
+```yaml
+version: '2'
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - 80:80
+    depends_on:
+      - php
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+  php:
+    build: ./php/
+    env_file: .env
+    environment:
+      - MYSQL_HOSTMAME=db
+      - MYSQL_USER=root
+    depends_on:
+      - db
+    ports:
+      - 9000:9000
+    volumes:
+      - ./php:/code/
+  db:
+    image: mysql:latest
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+```
+
+
